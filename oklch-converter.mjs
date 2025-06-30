@@ -56,7 +56,15 @@ inputLines.forEach((line) => {
 
   try {
     const color = new Color(hex);
-    const oklch = color.to('oklch').toString(); // ex: oklch(0.7 0.1 120)
+    const oklchColor = color.to('oklch');
+    let [l, c, h] = oklchColor.coords;
+
+    l = Number(l).toFixed(4);
+    c = Number(c).toFixed(4);
+    h = c == 0 ? '0' : Number(h).toFixed(2); // hue deve ser 0 se acromático
+
+    const oklch = `oklch(${l} ${c} ${h})`;
+
     const varName = `--color-${index}`;
     lines.push(`  ${varName}: ${oklch};`);
     console.log(chalk.green(`✔ ${varName}`), chalk.hex(hex)(hex), chalk.gray('→'), chalk.whiteBright(oklch));
